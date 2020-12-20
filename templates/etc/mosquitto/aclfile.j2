@@ -1,0 +1,18 @@
+################################################################################
+# Managed by Ansible
+
+# ACL for clients without a username
+topic read $SYS/#
+
+# ACL list that comes from ansible if applicable
+{% for acl in mqtt_acls %}
+user {{ acl.user }}
+{% for item in acl.topics %}
+topic {{ item.right }} {{ item.topic }}
+{% endfor %}
+{% endfor %}
+
+# Patterns from ansible if applicable
+{% for pattern in mqtt_acls_patterns %}
+{{ pattern }}
+{% endfor %}

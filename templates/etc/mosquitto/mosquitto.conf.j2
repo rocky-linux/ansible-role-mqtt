@@ -1,0 +1,32 @@
+################################################################################
+# Managed by Ansible
+
+# user for mqtt
+user mosquitto
+
+{% if mqtt_tls %}
+# TLS if enabled in ansible
+port 8883
+cafile /etc/pki/tls/certs/{{ mqtt_tls_ca }}
+certfile /etc/pki/tls/certs/{{ mqtt_tls_cert }}
+keyfile /etc/pki/tls/private/{{ mqtt_tls_key }}
+tls_version tlsv1.2
+require_certificate true
+use_identity_as_username true
+{% else %}
+# no TLS so using a password file .. to be done
+port 1883
+password_file /etc/mosquitto/pwfile
+{% endif %}
+
+# anonymous is not allowed
+allow_anonymous false
+
+# ACL list
+acl_file /etc/mosquitto/aclfile
+
+# Persistence configuration
+autosave_interval 300
+persistence true
+persistence_file mosquitto.db
+persistence_location {{ mqtt_persistence_dir }}

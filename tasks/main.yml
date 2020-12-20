@@ -20,7 +20,7 @@
 
 - name: Configure mosquitto
   template:
-    src: "{{ item }}.j2"
+    src: "etc/mosquitto/{{ item }}.j2"
     dest: "/etc/mosquitto/{{ item }}"
     owner: mosquitto
     group: mosquitto
@@ -43,7 +43,7 @@
 
 - name: Configure mqtt rules - tls
   ansible.posix.firewalld:
-    port: "1883/tcp"
+    port: "8883/tcp"
     permanent: true
     state: enabled
     immediate: true
