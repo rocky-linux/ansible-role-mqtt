@@ -1,2 +1,50 @@
 ---
-# tasks
+# EPEL is an absolute requirement
+- name: Install the EPEL repository
+  yum:
+    name: epel-release
+    state: present
+
+- name: Install required packages
+  yum:
+    name: mosquitto
+    state: present
+
+- name: Ensure that a persistence directory exists
+  file:
+    path: "{{ mqtt_persistence }}"
+    state: directory
+    owner: mosquitto
+    group: mosquitto
+    mode: '0750'
+
+- name: Configure mosquitto
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/mosquitto/{{ item }}"
+    owner: mosquitto
+    group: mosquitto
+    mode: '0644'
+  notify: restart_mosquitto
+  with_items:
+    - mosquitto.conf
+    - aclfile
+    - pwfile
+
+- include_tasks: mqtt_tls.yml
+  when: mqtt_tls
+
+- name: Configure mqtt rules - nontls
+  ansible.posix.firewalld:
+    port: "1883/tcp"
+    permanent: true
+    state: enabled
+    immediate: true
+
+- name: Configure mqtt rules - tls
+  ansible.posix.firewalld:
+    port: "1883/tcp"
+    permanent: true
+    state: enabled
+    immediate: true
+  when: mqtt_tls

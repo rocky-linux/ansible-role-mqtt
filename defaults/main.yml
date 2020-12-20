@@ -1,2 +1,29 @@
 ---
-# ansible default variables - most variables live here
+# Default variables for mqtt
+# It is your responsibility to set the variables in your own playbook. We will
+# not set defaults here for TLS mode
+
+mqtt_persistence: /var/lib/mosquitto/
+
+# Examples of ACL's, these are used for topic restrictions and rights
+# You should define these in your own playbooks.
+mqtt_acl:
+  - user: exampleUserA
+    pass: examplePassA
+    topics:
+      - topic: topicreadwrite/#
+        right: readwrite
+      - topic: topicread/sub
+        right: readwrite
+
+# Below is a default pattern, you may want to override this
+mqtt_acls_patterns:
+  - pattern write $SYS/broker/connection/%c/state
+
+mqtt_tls: true
+
+# These will be expected in your playbook if the above is true
+# The below should be FULL PATHS NOT SHORT PATHS
+# mqtt_tls_ca_cert:
+# mqtt_tls_cert:
+# mqtt_tls_key:

@@ -1,0 +1,32 @@
+---
+# TLS for MQTT - Certificates MUST already exist on the system
+- name: mqtt tls setup
+  block:
+    - name: Check that mqtt variables are set
+      assert:
+        that:
+          - mqtt_tls_ca_cert | mandatory
+          - mqtt_tls_cert | mandatory
+          - mqtt_tls_key | mandatory
+        fail_msg: "mqtt certificates are not defined"
+        success_msg: "mqtt certificates are defined"
+        quiet: true
+
+    - name: Check that the certificates exist
+      stat:
+        path: "{{ item }}"
+      register: mqtt_certs_results
+      ignore_errors: true
+      with_items:
+        - mqtt_tls_ca_cert
+        - mqtt_tls_cert
+        - mqtt_tls_key
+
+    - name: Verify certificates exist
+      assert:
+        that:
+          - item.stat.exists | mandatory
+        fail_msg: "certificate file or files not found"
+        success_msg: "certificate file or files not found"
+        quiet: true
+  when: mqtt_tls

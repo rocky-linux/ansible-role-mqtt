@@ -1,7 +1,11 @@
 CI Badge
 
 # Ansible template role
-basic Role to use going forward because I forget pieces
+The Rocky Linux mqtt role
+
+Ensure you read the comments in the `defaults/main.yml` file.
+
+This role is loosely based on a CentOS infra role with modifications to fit our needs. This role does not provide certificates and expects certificates to already be on the system (issued by IPA or otherwise).
 
 ## Getting started
 Ensure all dependencies are installed and then follow the below process
@@ -36,5 +40,3 @@ There are numerous other options within the [defaults/main.yml](./defaults/main.
 
 ## Changelog
 The [changelog](./CHANGELOG.md) is stored externally
-
-
