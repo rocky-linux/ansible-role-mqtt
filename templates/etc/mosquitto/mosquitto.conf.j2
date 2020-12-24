@@ -7,9 +7,9 @@ user mosquitto
 {% if mqtt_tls %}
 # TLS if enabled in ansible
 port 8883
-cafile /etc/pki/tls/certs/{{ mqtt_tls_ca }}
-certfile /etc/pki/tls/certs/{{ mqtt_tls_cert }}
-keyfile /etc/pki/tls/private/{{ mqtt_tls_key }}
+cafile {{ mqtt_tls_ca_cert }}
+certfile {{ mqtt_tls_cert }}
+keyfile {{ mqtt_tls_key }}
 tls_version tlsv1.2
 require_certificate true
 use_identity_as_username true
